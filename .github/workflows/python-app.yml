@@ -29,3 +29,5 @@ jobs:
     # run main.py
     - name: Run main.py
       run: uv run main.py
+      env:
+        MONGO_URI: ${{ secrets.MONGO_URI }}
