@@ -15,6 +15,10 @@ from bs4 import (
     BeautifulSoup,
 )  # docs: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 ROOT = "https://lowcygier.pl"
 WP_API = f"{ROOT}/wp-json/wp/v2/posts"
 WP_PARAMS = {
