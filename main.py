@@ -14,10 +14,11 @@ import feedparser
 from bs4 import (
     BeautifulSoup,
 )  # docs: https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+from helpers.mongodb import MongoDBHelper
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv()  # This will load the MONGO_URI from .env file
 
 ROOT = "https://lowcygier.pl"
 WP_API = f"{ROOT}/wp-json/wp/v2/posts"
@@ -34,7 +35,7 @@ UA = (
 
 def session() -> requests.Session:
     """Return a Cloudflare‑aware session with modern headers."""
-    s = cloudscraper.create_scraper(browser={"custom": "Scraper 1.0"})
+    s = cloudscraper.create_scraper(browser={"custom": "Scraper 1.0"})
     s.headers.update(
         {"User-Agent": UA, "Accept-Language": "pl-PL,pl;q=0.9,en-US;q=0.8"}
     )
@@ -120,7 +121,7 @@ def get_news(limit: int | None = None):
 
 def get_news_and_save(filepath: str, limit: int | None = None):
     """
-    Get news and save the results to a JSON file.
+    Get news and save the results to a JSON file and MongoDB.
 
     Args:
         filepath: Path where the JSON file will be saved
@@ -131,10 +132,23 @@ def get_news_and_save(filepath: str, limit: int | None = None):
     """
     news = get_news(limit)
 
+    # Save to JSON file
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(news, f, indent=2, ensure_ascii=False)
 
     print(f"Saved {len(news)} news items to {filepath}")
+
+    # Save to MongoDB using the MONGO_URI environment variable
+    db_helper = MongoDBHelper()  # Will use MONGO_URI from environment
+    if db_helper.connect("lowcy_gier") is not None:
+        inserted_count = db_helper.save_news_items(news, "data")
+        print(f"Saved {inserted_count} new items to MongoDB lowcy_gier.data collection")
+        db_helper.close()
+    else:
+        print(
+            "Failed to connect to MongoDB - check that MONGO_URI environment variable is set correctly"
+        )
+
     return news
 
 
