@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional, Union
 class MongoDBHelper:
     """Helper class for MongoDB operations."""
 
-    def __init__(self, connection_string: str = None):
+    def __init__(self, connection_string: Optional[str] = None):
         """
         Initialize MongoDB helper.
 
