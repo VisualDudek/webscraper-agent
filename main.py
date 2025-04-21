@@ -8,7 +8,6 @@ from __future__ import annotations
 from datetime import datetime
 import json
 import re
-import sys
 import requests
 import cloudscraper
 import feedparser
@@ -104,7 +103,8 @@ def html_scrape(s: requests.Session):
 
 def get_news(limit: int | None = None):
     s = session()
-    for fn in (wp_rest, rss, html_scrape):
+    # for fn in (wp_rest, rss, html_scrape):
+    for fn in [rss]:
         try:
             data = fn(s)
             if data:
