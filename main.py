@@ -114,7 +114,29 @@ def get_news(limit: int | None = None):
     return []
 
 
+def get_news_and_save(filepath: str, limit: int | None = None):
+    """
+    Get news and save the results to a JSON file.
+
+    Args:
+        filepath: Path where the JSON file will be saved
+        limit: Optional limit for the number of news items
+
+    Returns:
+        The news data that was saved
+    """
+    news = get_news(limit)
+
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(news, f, indent=2, ensure_ascii=False)
+
+    print(f"Saved {len(news)} news items to {filepath}")
+    return news
+
+
 # CLI usage ---------------------------------------------------------------
 if __name__ == "__main__":
-    news = get_news()
-    print(json.dumps(news, indent=2, ensure_ascii=False))
+    # news = get_news()
+    # print(json.dumps(news, indent=2, ensure_ascii=False))
+
+    get_news_and_save("output.json")
