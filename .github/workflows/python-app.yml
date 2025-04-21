@@ -6,6 +6,8 @@ name: Python application
 on:
   # Manually trigger the workflow
   workflow_dispatch:
+  schedule:
+    - cron: '55 * * * *'  # Every hour at minute 30 (UTC)
 
 permissions:
   contents: write
