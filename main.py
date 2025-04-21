@@ -132,11 +132,12 @@ def get_news_and_save(filepath: str, limit: int | None = None):
     """
     news = get_news(limit)
 
+    # TODO refactor to diff fn.
     # Save to JSON file
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(news, f, indent=2, ensure_ascii=False)
+    # with open(filepath, "w", encoding="utf-8") as f:
+    #     json.dump(news, f, indent=2, ensure_ascii=False)
 
-    print(f"Saved {len(news)} news items to {filepath}")
+    # print(f"Saved {len(news)} news items to {filepath}")
 
     # Save to MongoDB using the MONGO_URI environment variable
     db_helper = MongoDBHelper()  # Will use MONGO_URI from environment
